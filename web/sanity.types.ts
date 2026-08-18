@@ -34,6 +34,17 @@ export type Locale = {
   default?: boolean;
 };
 
+export type Podcast = {
+  _id: string;
+  _type: "podcast";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  date?: string;
+  youtubeLink?: string;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
@@ -278,6 +289,7 @@ export type Geopoint = {
 export type AllSanitySchemaTypes =
   | LocaleReference
   | Locale
+  | Podcast
   | SanityImageAssetReference
   | Event
   | SanityImageCrop
