@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {Button} from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -17,6 +17,12 @@ type NavigationItem = {
 }[]
 
 const Navbar = ({navigationData}: {navigationData: NavigationItem}) => {
+  const {pathname} = useLocation()
+  // On the home route the hero video fills the viewport, so the navbar floats
+  // transparently over the video instead of pushing it down (which would force
+  // a vertical scroll and reveal the footer).
+  const isHome = pathname === '/'
+
   // Split the navigation items around the centered logo so the layout keeps
   // the original block's symmetry (links on both sides of the logo).
   const midpoint = Math.ceil(navigationData.length / 2)
@@ -34,9 +40,21 @@ const Navbar = ({navigationData}: {navigationData: NavigationItem}) => {
   )
 
   return (
-    <header className='bg-background sticky top-0 z-50'>
+    <header
+      className={
+        isHome
+          ? 'absolute inset-x-0 top-0 z-50'
+          : 'bg-background sticky top-0 z-50'
+      }
+    >
       <div className='mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-7 sm:px-6'>
-        <div className='text-muted-foreground flex flex-1 items-center gap-8 font-medium md:justify-center lg:gap-16'>
+        <div
+          className={
+            isHome
+              ? 'flex flex-1 items-center gap-8 font-medium text-white md:justify-center lg:gap-16'
+              : 'text-muted-foreground flex flex-1 items-center gap-8 font-medium md:justify-center lg:gap-16'
+          }
+        >
           {leftLinks.map(renderDesktopLink)}
           <Link to='/'>
             <Logo className='text-foreground gap-3' />

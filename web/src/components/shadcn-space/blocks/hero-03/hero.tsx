@@ -15,7 +15,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, body }) => {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-end bg-black h-full min-h-screen overflow-hidden"
+      className="relative flex items-end bg-black h-svh overflow-hidden"
     >
       {/* Background Video */}
       <video
