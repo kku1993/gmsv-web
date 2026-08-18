@@ -1,6 +1,7 @@
 import {useFetch} from '@/hooks/useFetch'
 import {fetchPage} from '@/sanity/queries'
-import {PortableText} from '@/components/PortableText'
+import {SanityImage} from '@/components/SanityImage'
+import {Markdown} from '@/components/Markdown'
 import {Container} from '@/components/Page'
 import {Skeleton} from '@/components/ui/skeleton'
 
@@ -9,13 +10,23 @@ export default function Home() {
 
   return (
     <>
-      {/* Full-width banner image */}
+      {/* Full-width banner image: prefer the page's banner, fall back to the static asset */}
       <div className="relative w-full">
-        <img
-          src="/home-visual.jpg"
-          alt="GMSV"
-          className="h-[50vh] min-h-80 w-full object-cover"
-        />
+        {page?.bannerImage ? (
+          <SanityImage
+            image={page.bannerImage}
+            alt={page.title ?? 'GMSV'}
+            width={1600}
+            height={800}
+            className="h-[50vh] min-h-80 w-full object-cover"
+          />
+        ) : (
+          <img
+            src="/home-visual.jpg"
+            alt="GMSV"
+            className="h-[50vh] min-h-80 w-full object-cover"
+          />
+        )}
       </div>
 
       <Container className="max-w-3xl">
@@ -29,7 +40,7 @@ export default function Home() {
         ) : error ? (
           <p className="text-muted-foreground">Unable to load content.</p>
         ) : page?.body ? (
-          <PortableText value={page.body} />
+          <Markdown content={page.body} />
         ) : (
           <p className="text-muted-foreground">No content yet.</p>
         )}

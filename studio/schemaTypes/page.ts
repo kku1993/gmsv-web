@@ -1,4 +1,4 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 export const page = defineType({
   name: 'page',
@@ -19,40 +19,33 @@ export const page = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'string',
-      description: 'Short summary used in listings and meta descriptions.',
-      options: {maxLength: 160},
-    }),
-    defineField({
       name: 'body',
       title: 'Body',
-      type: 'array',
-      of: [defineArrayMember({type: 'block'})],
+      type: 'markdown',
+      description: 'Markdown-formatted page content.',
     }),
     defineField({
-      name: 'people',
-      title: 'People',
-      type: 'array',
-      description: 'Team members shown on this page (e.g. the About page).',
-      of: [defineArrayMember({type: 'reference', to: [{type: 'person'}]})],
-    }),
-    // Managed by @sanity/document-internationalization — set automatically from the
-    // language picker, hidden from editors.
-    defineField({
-      name: 'language',
-      title: 'Language',
-      type: 'string',
-      readOnly: true,
-      hidden: true,
+      name: 'bannerImage',
+      title: 'Banner Image',
+      type: 'image',
+      description: 'Optional banner image shown at the top of the page.',
+      options: {hotspot: true},
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative Text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Alt text is important for accessibility'),
+        }),
+      ],
     }),
   ],
   preview: {
-    select: {title: 'title', slug: 'slug.current', language: 'language'},
-    prepare: ({title, slug, language}) => ({
+    select: {title: 'title', slug: 'slug.current', media: 'bannerImage'},
+    prepare: ({title, slug, media}) => ({
       title: title ?? 'Untitled',
-      subtitle: [language?.toUpperCase(), slug && `/${slug}`].filter(Boolean).join(' · '),
+      subtitle: slug && `/${slug}`,
+      media,
     }),
   },
 })
