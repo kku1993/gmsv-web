@@ -31,9 +31,21 @@ export const page = defineType({
       type: 'array',
       of: [defineArrayMember({type: 'block'})],
     }),
+    // Managed by @sanity/document-internationalization — set automatically from the
+    // language picker, hidden from editors.
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      readOnly: true,
+      hidden: true,
+    }),
   ],
   preview: {
-    select: {title: 'title', slug: 'slug.current'},
-    prepare: ({title, slug}) => ({title: title ?? 'Untitled', subtitle: slug ? `/${slug}` : ''}),
+    select: {title: 'title', slug: 'slug.current', language: 'language'},
+    prepare: ({title, slug, language}) => ({
+      title: title ?? 'Untitled',
+      subtitle: [language?.toUpperCase(), slug && `/${slug}`].filter(Boolean).join(' · '),
+    }),
   },
 })

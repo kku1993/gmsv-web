@@ -15,6 +15,54 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type LocaleReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "locale";
+};
+
+export type Locale = {
+  _id: string;
+  _type: "locale";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  tag?: string;
+  fallback?: LocaleReference;
+  default?: boolean;
+};
+
+export type TranslationMetadata = {
+  _id: string;
+  _type: "translation.metadata";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  translations?: InternationalizedArrayReference;
+  schemaTypes?: Array<string>;
+};
+
+export type InternationalizedArrayReference = Array<
+  {
+    _key: string;
+  } & InternationalizedArrayReferenceValue
+>;
+
+export type PageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "page";
+};
+
+export type InternationalizedArrayReferenceValue = {
+  _type: "internationalizedArrayReferenceValue";
+  value?: PageReference;
+  language?: string;
+};
+
 export type Page = {
   _id: string;
   _type: "page";
@@ -42,6 +90,7 @@ export type Page = {
     _type: "block";
     _key: string;
   }>;
+  language?: string;
 };
 
 export type Slug = {
@@ -164,6 +213,12 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | LocaleReference
+  | Locale
+  | TranslationMetadata
+  | InternationalizedArrayReference
+  | PageReference
+  | InternationalizedArrayReferenceValue
   | Page
   | Slug
   | SanityImagePaletteSwatch
@@ -179,17 +234,28 @@ export type AllSanitySchemaTypes =
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PAGES_QUERY
-// Query: *[_type == "page" && defined(slug.current)] | order(title asc){ _id, title, slug, excerpt }
+// Query: *[_type == "page" && language == "en" && defined(slug.current)] {    "key": slug.current,    "en": { _id, title, slug, excerpt, language },    "zh-Hant": *[_type == "page" && language == "zh-Hant" && slug.current == ^.slug.current][0] { _id, title, slug, excerpt, language },  } | order(en.title asc)
 export type PAGES_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  excerpt: string | null;
+  key: string | null;
+  en: {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    excerpt: string | null;
+    language: string | null;
+  };
+  "zh-Hant": {
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    excerpt: string | null;
+    language: string | null;
+  } | null;
 }>;
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PAGE_QUERY
-// Query: *[_type == "page" && slug.current == $slug][0]{ _id, title, slug, excerpt, body }
+// Query: coalesce(    *[_type == "page" && language == $locale && slug.current == $slug][0] { _id, title, slug, excerpt, body, language },    *[_type == "page" && language == "en" && slug.current == $slug][0] { _id, title, slug, excerpt, body, language }  )
 export type PAGE_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -213,13 +279,14 @@ export type PAGE_QUERY_RESULT = {
     _type: "block";
     _key: string;
   }> | null;
+  language: string | null;
 } | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "page" && defined(slug.current)] | order(title asc){ _id, title, slug, excerpt }': PAGES_QUERY_RESULT;
-    '*[_type == "page" && slug.current == $slug][0]{ _id, title, slug, excerpt, body }': PAGE_QUERY_RESULT;
+    '*[_type == "page" && language == "en" && defined(slug.current)] {\n    "key": slug.current,\n    "en": { _id, title, slug, excerpt, language },\n    "zh-Hant": *[_type == "page" && language == "zh-Hant" && slug.current == ^.slug.current][0] { _id, title, slug, excerpt, language },\n  } | order(en.title asc)': PAGES_QUERY_RESULT;
+    'coalesce(\n    *[_type == "page" && language == $locale && slug.current == $slug][0] { _id, title, slug, excerpt, body, language },\n    *[_type == "page" && language == "en" && slug.current == $slug][0] { _id, title, slug, excerpt, body, language }\n  )': PAGE_QUERY_RESULT;
   }
 }
