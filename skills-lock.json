@@ -12,6 +12,12 @@
       "sourceType": "github",
       "skillPath": "skills/sanity-migration/SKILL.md",
       "computedHash": "b265ef004ade84f27a083e54bf3798242edf87c677fe2852b6ced4bd38517e0f"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10"
     }
   }
 }
