@@ -1,5 +1,6 @@
 import {Outlet, ScrollRestoration} from 'react-router-dom'
 import {Header} from './Header'
+import Footer from '@/components/shadcn-studio/blocks/footer-component-01/footer-component-01'
 
 // Shared page shell: static header row + page content. Used by every route.
 export function Layout() {
@@ -9,11 +10,7 @@ export function Layout() {
       <main className="flex-1">
         <Outlet />
       </main>
-      <footer className="border-t border-border py-6">
-        <div className="mx-auto max-w-6xl px-4 text-center text-sm text-muted-foreground">
-          GMSV
-        </div>
-      </footer>
+      <Footer />
       <ScrollRestoration />
     </div>
   )
