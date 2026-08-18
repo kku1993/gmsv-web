@@ -34,6 +34,13 @@ export type Locale = {
   default?: boolean;
 };
 
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type Podcast = {
   _id: string;
   _type: "podcast";
@@ -44,35 +51,6 @@ export type Podcast = {
   slug?: Slug;
   date?: string;
   youtubeLink?: string;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
-
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
-
-export type Event = {
-  _id: string;
-  _type: "event";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  date?: string;
-  startTime?: string;
-  endTime?: string;
-  locationName?: string;
-  locationAddress?: string;
-  description?: Markdown;
   bannerPhoto?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -97,6 +75,36 @@ export type SanityImageHotspot = {
   y?: number;
   height?: number;
   width?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
+
+export type Event = {
+  _id: string;
+  _type: "event";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  locationName?: string;
+  locationAddress?: string;
+  description?: Markdown;
+  bannerPhoto?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
 };
 
 export type Markdown = string;
@@ -291,12 +299,12 @@ export type Geopoint = {
 export type AllSanitySchemaTypes =
   | LocaleReference
   | Locale
-  | Podcast
-  | Slug
   | SanityImageAssetReference
-  | Event
+  | Podcast
   | SanityImageCrop
   | SanityImageHotspot
+  | Slug
+  | Event
   | Markdown
   | Person
   | TranslationMetadata

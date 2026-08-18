@@ -51,6 +51,21 @@ export const podcast = defineType({
           .required()
           .error('Must be a valid URL starting with http:// or https://'),
     }),
+    defineField({
+      name: 'bannerPhoto',
+      title: 'Banner Photo',
+      type: 'image',
+      description: 'Optional banner image for the podcast episode.',
+      options: {hotspot: true},
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative Text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Alt text is important for accessibility'),
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {title: 'title', slug: 'slug.current', date: 'date'},
