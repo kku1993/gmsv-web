@@ -21,6 +21,15 @@ const ROLE_ORDER = [
   'High School Intern',
 ] as const
 
+// Turn a role string into a URL-safe anchor id, e.g. "Co-President" →
+// "co-president". Stable across renders so the sidebar links resolve.
+function sectionId(role: string): string {
+  return role
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 // Group people by role, returning sections in ROLE_ORDER (then alphabetically
 // for any roles not explicitly listed). People with no role go into a final
 // "Team" section.
@@ -110,6 +119,7 @@ function PersonSkeleton() {
 
 export default function About() {
   const {data: people, loading, error} = useFetch('people', fetchPeople)
+  const sections = people && people.length > 0 ? groupByRole(people) : []
 
   return (
     <Container>
@@ -122,15 +132,37 @@ export default function About() {
             <PersonSkeleton key={i} />
           ))}
         </div>
-      ) : people && people.length > 0 ? (
-        <div className="flex flex-col gap-12">
-          {groupByRole(people).map(({role, people: group}, i) => (
-            <section key={role} className="flex flex-col gap-6">
-              {i > 0 ? <Separator /> : null}
-              <h2 className="text-2xl font-semibold tracking-tight">{role}</h2>
-              <PersonGrid people={group} />
-            </section>
-          ))}
+      ) : sections.length > 0 ? (
+        <div className="flex gap-10">
+          {/* Sticky "Jump to" sidebar */}
+          <aside className="hidden w-48 shrink-0 md:block">
+            <nav className="sticky top-24 flex flex-col gap-1">
+              {sections.map(({role}) => (
+                <a
+                  key={role}
+                  href={`#${sectionId(role)}`}
+                  className="rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  {role}
+                </a>
+              ))}
+            </nav>
+          </aside>
+
+          {/* Role sections */}
+          <div className="flex min-w-0 flex-1 flex-col gap-12">
+            {sections.map(({role, people: group}, i) => (
+              <section
+                key={role}
+                id={sectionId(role)}
+                className="flex scroll-mt-24 flex-col gap-6"
+              >
+                {i > 0 ? <Separator /> : null}
+                <h2 className="text-2xl font-semibold tracking-tight">{role}</h2>
+                <PersonGrid people={group} />
+              </section>
+            ))}
+          </div>
         </div>
       ) : (
         <p className="text-muted-foreground">No people yet.</p>
