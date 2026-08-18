@@ -3,7 +3,44 @@ import {fetchPeople, type Person} from '@/sanity/queries'
 import {SanityImage} from '@/components/SanityImage'
 import {Container, PageHeading} from '@/components/Page'
 import {Skeleton} from '@/components/ui/skeleton'
+import {Separator} from '@/components/ui/separator'
 import {cn} from '@/lib/utils'
+
+// Display order for role sections. Leadership first, then governance/advisors,
+// then staff/interns. Roles not listed here fall after, in alphabetical order.
+const ROLE_ORDER = [
+  'Chair',
+  'Co-President',
+  'Vice President',
+  'Chief Finance Officer',
+  'Secretary General',
+  'Board',
+  'Impact Specialist',
+  'Legal Consultant',
+  'Advisor',
+  'High School Intern',
+] as const
+
+// Group people by role, returning sections in ROLE_ORDER (then alphabetically
+// for any roles not explicitly listed). People with no role go into a final
+// "Team" section.
+function groupByRole(people: Person[]): {role: string; people: Person[]}[] {
+  const byRole = new Map<string, Person[]>()
+  for (const person of people) {
+    const role = person.role?.trim() || 'Team'
+    const list = byRole.get(role) ?? []
+    list.push(person)
+    byRole.set(role, list)
+  }
+
+  const known = ROLE_ORDER.filter((r) => byRole.has(r))
+  const knownSet = new Set<string>(known)
+  const extra = [...byRole.keys()].filter((r) => !knownSet.has(r)).sort()
+
+  return [...known, ...extra]
+    .filter((r) => byRole.has(r))
+    .map((role) => ({role, people: byRole.get(role)!}))
+}
 
 function PersonCard({person}: {person: Person}) {
   const hasUrl = Boolean(person.url)
@@ -51,6 +88,16 @@ function PersonCard({person}: {person: Person}) {
   )
 }
 
+function PersonGrid({people}: {people: Person[]}) {
+  return (
+    <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4">
+      {people.map((person) => (
+        <PersonCard key={person._id} person={person} />
+      ))}
+    </div>
+  )
+}
+
 function PersonSkeleton() {
   return (
     <div>
@@ -76,9 +123,13 @@ export default function About() {
           ))}
         </div>
       ) : people && people.length > 0 ? (
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4">
-          {people.map((person) => (
-            <PersonCard key={person._id} person={person} />
+        <div className="flex flex-col gap-12">
+          {groupByRole(people).map(({role, people: group}, i) => (
+            <section key={role} className="flex flex-col gap-6">
+              {i > 0 ? <Separator /> : null}
+              <h2 className="text-2xl font-semibold tracking-tight">{role}</h2>
+              <PersonGrid people={group} />
+            </section>
           ))}
         </div>
       ) : (
