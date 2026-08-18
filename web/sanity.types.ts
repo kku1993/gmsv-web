@@ -41,6 +41,47 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
+export type Event = {
+  _id: string;
+  _type: "event";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  locationName?: string;
+  locationAddress?: string;
+  description?: Markdown;
+  bannerPhoto?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type Markdown = string;
+
 export type Person = {
   _id: string;
   _type: "person";
@@ -58,22 +99,6 @@ export type Person = {
     _type: "image";
   };
   url?: string;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type TranslationMetadata = {
@@ -254,9 +279,11 @@ export type AllSanitySchemaTypes =
   | LocaleReference
   | Locale
   | SanityImageAssetReference
-  | Person
+  | Event
   | SanityImageCrop
   | SanityImageHotspot
+  | Markdown
+  | Person
   | TranslationMetadata
   | InternationalizedArrayReference
   | PageReference
