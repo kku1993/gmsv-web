@@ -76,15 +76,22 @@ export type PodcastDetail = PodcastSummary
 // -----------------------------------------------------------------------------
 // Queries
 //
-// The `page` schema is internationalized via @sanity/document-internationalization.
-// Per the project plan we assume English content, so page queries filter on
-// `language == "en"`.
+// The `page` schema is internationalized via @sanity/document-internationalization,
+// but not every page has its `language` field populated (e.g. the Mission page
+// has language == null). Per the project plan we assume English content, so we
+// fetch by slug and prefer an `en`-tagged version when one exists, falling back
+// to any page with that slug.
 // -----------------------------------------------------------------------------
 
 const PAGE_BY_SLUG = (slug: string) =>
-  `*[_type == "page" && language == "en" && slug.current == "${slug}"][0] {
-    _id, title, slug, excerpt, body
-  }`
+  `coalesce(
+    *[_type == "page" && language == "en" && slug.current == "${slug}"][0] {
+      _id, title, slug, excerpt, body
+    },
+    *[_type == "page" && slug.current == "${slug}"][0] {
+      _id, title, slug, excerpt, body
+    }
+  )`
 
 const PEOPLE = `*[_type == "person"] | order(name asc) {
   _id, name, role, url,
