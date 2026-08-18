@@ -16,6 +16,27 @@ export const event = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'Unique URL-friendly identifier. Must be unique across all events.',
+      options: {source: 'title'},
+      validation: (rule) =>
+        rule.required().custom(async (slug, context) => {
+          if (!slug?.current) return true
+
+          const client = context.getClient({apiVersion: '2026-08-18'})
+          const id = context.document?._id?.replace(/^drafts\./, '')
+
+          const existing = await client.fetch(
+            `count(*[_type == "event" && slug.current == $slug && _id != $id])`,
+            {slug: slug.current, id},
+          )
+
+          return existing === 0 || 'Slug already exists on another event'
+        }),
+    }),
+    defineField({
       name: 'date',
       title: 'Date',
       type: 'date',
@@ -86,10 +107,10 @@ export const event = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', date: 'date', media: 'bannerPhoto'},
-    prepare: ({title, date, media}) => ({
+    select: {title: 'title', slug: 'slug.current', date: 'date', media: 'bannerPhoto'},
+    prepare: ({title, slug, date, media}) => ({
       title: title ?? 'Untitled',
-      subtitle: date,
+      subtitle: [date, slug && `/${slug}`].filter(Boolean).join(' · '),
       media,
     }),
   },

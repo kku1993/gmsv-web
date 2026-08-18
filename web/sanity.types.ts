@@ -59,6 +59,7 @@ export type Event = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  slug?: Slug;
   date?: string;
   startTime?: string;
   endTime?: string;
@@ -92,6 +93,12 @@ export type SanityImageHotspot = {
 };
 
 export type Markdown = string;
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
 
 export type Person = {
   _id: string;
@@ -181,12 +188,6 @@ export type Page = {
     } & PersonReference
   >;
   language?: string;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -295,6 +296,7 @@ export type AllSanitySchemaTypes =
   | SanityImageCrop
   | SanityImageHotspot
   | Markdown
+  | Slug
   | Person
   | TranslationMetadata
   | InternationalizedArrayReference
@@ -302,7 +304,6 @@ export type AllSanitySchemaTypes =
   | InternationalizedArrayReferenceValue
   | PersonReference
   | Page
-  | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
