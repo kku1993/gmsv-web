@@ -14,6 +14,27 @@ export const podcast = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'Unique URL-friendly identifier. Must be unique across all podcasts.',
+      options: {source: 'title'},
+      validation: (rule) =>
+        rule.required().custom(async (slug, context) => {
+          if (!slug?.current) return true
+
+          const client = context.getClient({apiVersion: '2026-08-18'})
+          const id = context.document?._id?.replace(/^drafts\./, '')
+
+          const existing = await client.fetch(
+            `count(*[_type == "podcast" && slug.current == $slug && _id != $id])`,
+            {slug: slug.current, id},
+          )
+
+          return existing === 0 || 'Slug already exists on another podcast'
+        }),
+    }),
+    defineField({
       name: 'date',
       title: 'Date',
       type: 'date',
@@ -32,10 +53,10 @@ export const podcast = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', date: 'date'},
-    prepare: ({title, date}) => ({
+    select: {title: 'title', slug: 'slug.current', date: 'date'},
+    prepare: ({title, slug, date}) => ({
       title: title ?? 'Untitled',
-      subtitle: date,
+      subtitle: [date, slug && `/${slug}`].filter(Boolean).join(' · '),
     }),
   },
 })

@@ -41,8 +41,15 @@ export type Podcast = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  slug?: Slug;
   date?: string;
   youtubeLink?: string;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
 };
 
 export type SanityImageAssetReference = {
@@ -93,12 +100,6 @@ export type SanityImageHotspot = {
 };
 
 export type Markdown = string;
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
 
 export type Person = {
   _id: string;
@@ -291,12 +292,12 @@ export type AllSanitySchemaTypes =
   | LocaleReference
   | Locale
   | Podcast
+  | Slug
   | SanityImageAssetReference
   | Event
   | SanityImageCrop
   | SanityImageHotspot
   | Markdown
-  | Slug
   | Person
   | TranslationMetadata
   | InternationalizedArrayReference
