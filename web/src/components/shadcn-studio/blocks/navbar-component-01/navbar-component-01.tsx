@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import Logo from '@/components/shadcn-studio/logo'
-import {SearchIcon, MenuIcon} from 'lucide-react'
+import {MenuIcon} from 'lucide-react'
 
 type NavigationItem = {
   title: string
@@ -45,10 +45,6 @@ const Navbar = ({navigationData}: {navigationData: NavigationItem}) => {
         </div>
 
         <div className='flex items-center gap-6'>
-          <Button variant='ghost' size='icon'>
-            <SearchIcon />
-            <span className='sr-only'>Search</span>
-          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger className='md:hidden' render={<Button variant='outline' size='icon' />}>
               <MenuIcon />
