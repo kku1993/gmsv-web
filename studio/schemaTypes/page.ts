@@ -31,6 +31,13 @@ export const page = defineType({
       type: 'array',
       of: [defineArrayMember({type: 'block'})],
     }),
+    defineField({
+      name: 'people',
+      title: 'People',
+      type: 'array',
+      description: 'Team members shown on this page (e.g. the About page).',
+      of: [defineArrayMember({type: 'reference', to: [{type: 'person'}]})],
+    }),
     // Managed by @sanity/document-internationalization — set automatically from the
     // language picker, hidden from editors.
     defineField({

@@ -34,6 +34,48 @@ export type Locale = {
   default?: boolean;
 };
 
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type Person = {
+  _id: string;
+  _type: "person";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  role?: string;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  url?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type TranslationMetadata = {
   _id: string;
   _type: "translation.metadata";
@@ -63,6 +105,13 @@ export type InternationalizedArrayReferenceValue = {
   language?: string;
 };
 
+export type PersonReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "person";
+};
+
 export type Page = {
   _id: string;
   _type: "page";
@@ -90,6 +139,11 @@ export type Page = {
     _type: "block";
     _key: string;
   }>;
+  people?: Array<
+    {
+      _key: string;
+    } & PersonReference
+  >;
   language?: string;
 };
 
@@ -135,22 +189,6 @@ export type SanityImageMetadata = {
   thumbHash?: string;
   hasAlpha?: boolean;
   isOpaque?: boolean;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
 };
 
 export type SanityFileAsset = {
@@ -215,18 +253,21 @@ export type Geopoint = {
 export type AllSanitySchemaTypes =
   | LocaleReference
   | Locale
+  | SanityImageAssetReference
+  | Person
+  | SanityImageCrop
+  | SanityImageHotspot
   | TranslationMetadata
   | InternationalizedArrayReference
   | PageReference
   | InternationalizedArrayReferenceValue
+  | PersonReference
   | Page
   | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
@@ -255,7 +296,7 @@ export type PAGES_QUERY_RESULT = Array<{
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: PAGE_QUERY
-// Query: coalesce(    *[_type == "page" && language == $locale && slug.current == $slug][0] { _id, title, slug, excerpt, body, language },    *[_type == "page" && language == "en" && slug.current == $slug][0] { _id, title, slug, excerpt, body, language }  )
+// Query: coalesce(    *[_type == "page" && language == $locale && slug.current == $slug][0] {      _id, title, slug, excerpt, body, language,      "people": people[]->{_id, name, role, url, "image": image{asset->{_id, url}, alt}}    },    *[_type == "page" && language == "en" && slug.current == $slug][0] {      _id, title, slug, excerpt, body, language,      "people": people[]->{_id, name, role, url, "image": image{asset->{_id, url}, alt}}    }  )
 export type PAGE_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -280,6 +321,19 @@ export type PAGE_QUERY_RESULT = {
     _key: string;
   }> | null;
   language: string | null;
+  people: Array<{
+    _id: string;
+    name: string | null;
+    role: string | null;
+    url: string | null;
+    image: {
+      asset: {
+        _id: string;
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+  }> | null;
 } | null;
 
 // Query TypeMap
@@ -287,6 +341,6 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "page" && language == "en" && defined(slug.current)] {\n    "key": slug.current,\n    "en": { _id, title, slug, excerpt, language },\n    "zh-Hant": *[_type == "page" && language == "zh-Hant" && slug.current == ^.slug.current][0] { _id, title, slug, excerpt, language },\n  } | order(en.title asc)': PAGES_QUERY_RESULT;
-    'coalesce(\n    *[_type == "page" && language == $locale && slug.current == $slug][0] { _id, title, slug, excerpt, body, language },\n    *[_type == "page" && language == "en" && slug.current == $slug][0] { _id, title, slug, excerpt, body, language }\n  )': PAGE_QUERY_RESULT;
+    'coalesce(\n    *[_type == "page" && language == $locale && slug.current == $slug][0] {\n      _id, title, slug, excerpt, body, language,\n      "people": people[]->{_id, name, role, url, "image": image{asset->{_id, url}, alt}}\n    },\n    *[_type == "page" && language == "en" && slug.current == $slug][0] {\n      _id, title, slug, excerpt, body, language,\n      "people": people[]->{_id, name, role, url, "image": image{asset->{_id, url}, alt}}\n    }\n  )': PAGE_QUERY_RESULT;
   }
 }
