@@ -32,7 +32,7 @@ const Footer = () => {
           </div>
         </Link>
 
-        <div className='flex items-center gap-5 whitespace-nowrap'>
+        <div className='flex flex-wrap items-center justify-center gap-x-5 gap-y-2'>
           {NAV_LINKS.map((item) => (
             <Link
               key={item.href}
