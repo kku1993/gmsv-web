@@ -12,6 +12,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, body }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
+  // Split the title so "Good Morning" renders orange and "Silicon Valley"
+  // renders green. Anything before/after those phrases keeps the default color.
+  const renderTitle = (raw: string) => {
+    const match = raw.match(/^(.*?)(Silicon Valley)(.*)$/s);
+    if (!match) return raw;
+    const [, before, siliconValley, after] = match;
+    return (
+      <>
+        <span className="text-orange-500">{before}</span>
+        <span className="text-green-500">{siliconValley}</span>
+        {after}
+      </>
+    );
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -45,7 +60,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, body }) => {
             transition={{ duration: 0.3, ease: "easeInOut", delay: 0.2 }}
             className="text-white text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl leading-10 lg:leading-32 font-bold"
           >
-            {title}
+            {title ? renderTitle(title) : title}
           </motion.h1>
         </div>
       </div>
