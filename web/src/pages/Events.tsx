@@ -1,51 +1,52 @@
-import {Link} from 'react-router-dom'
 import {useFetch} from '@/hooks/useFetch'
 import {fetchEvents, type EventSummary} from '@/sanity/queries'
-import {SanityImage} from '@/components/SanityImage'
-import {Container, PageHeading} from '@/components/Page'
-import {Skeleton} from '@/components/ui/skeleton'
-import {Badge} from '@/components/ui/badge'
+import {urlFor} from '@/sanity/image'
 import {formatDate, formatTimeRange} from '@/lib/format'
+import {Skeleton} from '@/components/ui/skeleton'
+import {Container} from '@/components/Page'
+import Blog, {type BlogPost} from '@/components/shadcn-studio/blocks/blog-component-17/blog-component-17'
 
-function EventRow({event}: {event: EventSummary}) {
+// Map a Sanity event summary to the BlogPost shape expected by the block.
+// Image URLs are built up-front via the Sanity image URL builder so the block
+// can render them with a plain <img> tag.
+function eventToPost(event: EventSummary): BlogPost {
   const slug = event.slug?.current
-  const to = slug ? `/events/${slug}` : '#'
-  const date = formatDate(event.date)
+  const blogLink = slug ? `/events/${slug}` : '/events'
   const time = formatTimeRange(event.startTime, event.endTime)
-  const place = event.locationName
+  const place = event.locationName ?? ''
+  const description = [time, place].filter(Boolean).join(' · ')
 
-  return (
-    <Link
-      to={to}
-      className="flex flex-col gap-4 border-b border-border py-6 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center"
-    >
-      <SanityImage
-        image={event.bannerPhoto}
-        alt={event.title ?? ''}
-        width={320}
-        height={200}
-        aspect="aspect-video"
-        className="w-full rounded-lg sm:w-64 sm:shrink-0"
-      />
-      <div className="flex flex-1 flex-col gap-2">
-        <h2 className="text-xl font-semibold tracking-tight">{event.title}</h2>
-        <div className="flex flex-wrap gap-2">
-          {date ? <Badge variant="secondary">{date}</Badge> : null}
-          {time ? <Badge variant="outline">{time}</Badge> : null}
-          {place ? <Badge variant="outline">{place}</Badge> : null}
-        </div>
-      </div>
-    </Link>
-  )
+  return {
+    title: event.title ?? 'Untitled event',
+    description,
+    imageUrl: urlFor(event.bannerPhoto)?.width(600).height(400).auto('format').quality(80).url() ?? '',
+    imageAlt: event.bannerPhoto?.alt ?? event.title ?? '',
+    date: formatDate(event.date),
+    category: 'Event',
+    author: place || 'GMSV',
+    authorLink: blogLink,
+    blogLink,
+    categoryLink: '/events',
+  }
 }
 
-function EventRowSkeleton() {
+function EventsSkeleton() {
   return (
-    <div className="flex flex-col gap-4 border-b border-border py-6 sm:flex-row sm:items-center">
-      <Skeleton className="aspect-video w-full rounded-lg sm:w-64 sm:shrink-0" />
-      <div className="flex flex-1 flex-col gap-2">
-        <Skeleton className="h-6 w-2/3" />
-        <Skeleton className="h-5 w-24" />
+    <div className='mx-auto max-w-7xl space-y-16 px-4 py-8 sm:px-6 lg:px-8'>
+      <div className='space-y-4'>
+        <Skeleton className='h-6 w-24' />
+        <Skeleton className='h-10 w-48' />
+        <Skeleton className='h-6 w-96' />
+      </div>
+      <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+        {Array.from({length: 3}).map((_, i) => (
+          <div key={i} className='flex flex-col gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10'>
+            <Skeleton className='h-59.5 w-full rounded-lg' />
+            <Skeleton className='h-5 w-1/2' />
+            <Skeleton className='h-6 w-3/4' />
+            <Skeleton className='h-4 w-full' />
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -54,26 +55,35 @@ function EventRowSkeleton() {
 export default function Events() {
   const {data: events, loading, error} = useFetch('events', fetchEvents)
 
+  if (loading) {
+    return (
+      <Container className='px-0 py-0'>
+        <EventsSkeleton />
+      </Container>
+    )
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <p className='text-muted-foreground'>Unable to load events.</p>
+      </Container>
+    )
+  }
+
+  if (!events || events.length === 0) {
+    return (
+      <Container>
+        <p className='text-muted-foreground'>No events yet.</p>
+      </Container>
+    )
+  }
+
   return (
-    <Container>
-      <PageHeading title="Events" />
-      {error ? (
-        <p className="text-muted-foreground">Unable to load events.</p>
-      ) : loading ? (
-        <div className="flex flex-col">
-          {Array.from({length: 4}).map((_, i) => (
-            <EventRowSkeleton key={i} />
-          ))}
-        </div>
-      ) : events && events.length > 0 ? (
-        <div className="flex flex-col">
-          {events.map((event) => (
-            <EventRow key={event._id} event={event} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-muted-foreground">No events yet.</p>
-      )}
-    </Container>
+    <Blog
+      blogPosts={events.map(eventToPost)}
+      heading='Events'
+      subtitle='Join us at our upcoming community events and gatherings.'
+    />
   )
 }
