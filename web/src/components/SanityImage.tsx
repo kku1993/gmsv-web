@@ -27,7 +27,9 @@ export function SanityImage({
   const finalAlt = alt ?? image?.alt ?? ''
 
   if (!builder) {
-    // Placeholder when no asset is referenced.
+    // Placeholder when no asset is referenced. Sized via `aspect` + `className`
+    // (e.g. `aspect-square w-full`) to match the <img> branch below, so grid
+    // layout stays consistent when some items are missing an image.
     return (
       <div
         className={cn(
@@ -35,7 +37,6 @@ export function SanityImage({
           aspect,
           className,
         )}
-        style={width || height ? {width, height} : undefined}
         aria-label={finalAlt || undefined}
       />
     )
