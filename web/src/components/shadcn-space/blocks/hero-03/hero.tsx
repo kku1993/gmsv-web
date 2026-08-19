@@ -50,7 +50,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, body }) => {
       <div className="relative z-10 mx-auto max-w-7xl px-4 xl:px-16">
         <div className="flex flex-col gap-4 sm:gap-6 py-10 sm:py-16">
           {body ? (
-            <p className="text-white sm:text-base text-sm sm:leading-6 leading-5 font-normal sm:max-w-sm">
+            <p className="text-white sm:text-base text-sm sm:leading-6 leading-5 font-normal sm:max-w-sm" style={{ fontFamily: 'Michroma, sans-serif' }}>
               {body}
             </p>
           ) : null}
