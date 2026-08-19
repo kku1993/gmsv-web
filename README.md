@@ -7,6 +7,16 @@ Marketing/site frontend plus the Sanity Studio that manages its content.
 
 Sanity project: `aqo7zrnm` · dataset: `production`.
 
+## Editing content (no code required)
+
+For most content edits — adding an event, adding a person, uploading photos,
+updating text, etc. — you do **not** need to run anything locally. Just visit
+the deployed Studio at **https://gmsv.sanity.studio/** and edit content
+directly in your browser. Changes publish to the site automatically.
+
+The instructions below are only needed for development work: running the
+frontend locally, or changing the Studio schema/code.
+
 ## Prerequisites
 
 - **Node 22** (tested on v22.21.1) and npm.
