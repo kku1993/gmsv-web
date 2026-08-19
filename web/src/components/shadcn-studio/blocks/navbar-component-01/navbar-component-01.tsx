@@ -1,12 +1,11 @@
 import {Link, useLocation} from 'react-router-dom'
 import {Button} from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet'
 
 import Logo from '@/components/shadcn-studio/logo'
 import {MenuIcon} from 'lucide-react'
@@ -63,21 +62,36 @@ const Navbar = ({navigationData}: {navigationData: NavigationItem}) => {
         </div>
 
         <div className='flex items-center gap-6'>
-          <DropdownMenu>
-            <DropdownMenuTrigger className='md:hidden' render={<Button variant='outline' size='icon' />}>
+          <Sheet>
+            <SheetTrigger className='md:hidden' render={<Button variant='outline' size='icon' />}>
               <MenuIcon />
               <span className='sr-only'>Menu</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className='w-56' align='end'>
-              <DropdownMenuGroup>
-                {navigationData.map((item, index) => (
-                  <DropdownMenuItem key={index}>
-                    <Link to={item.href}>{item.title}</Link>
-                  </DropdownMenuItem>
+            </SheetTrigger>
+            <SheetContent side='right' className='w-72'>
+              <SheetClose render={<Link to='/' />}>
+                <Logo className='text-foreground gap-3' />
+              </SheetClose>
+              <nav className='mt-2 flex flex-col gap-1'>
+                {navigationData.map((item) => (
+                  <SheetClose
+                    key={item.href}
+                    render={
+                      <Link
+                        to={item.href}
+                        className={
+                          pathname === item.href
+                            ? 'hover:bg-muted rounded-md px-3 py-2 text-base font-medium text-foreground'
+                            : 'hover:bg-muted rounded-md px-3 py-2 text-base font-medium text-muted-foreground'
+                        }
+                      />
+                    }
+                  >
+                    {item.title}
+                  </SheetClose>
                 ))}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
