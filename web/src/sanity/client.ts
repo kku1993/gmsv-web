@@ -9,9 +9,13 @@ if (!projectId || !dataset) {
   )
 }
 
+// Bypass the CDN in dev so published edits show up immediately.
+// In production, the CDN (apicdn.sanity.io) gives fast cached reads
+// and revalidates on a short edge TTL (~60s), so changes appear within
+// about a minute of publishing.
 export const client = createClient({
   projectId,
   dataset,
   apiVersion: '2026-08-18',
-  useCdn: true,
+  useCdn: import.meta.env.PROD,
 })
