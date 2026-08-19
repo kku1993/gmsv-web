@@ -13,7 +13,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, body }) => {
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
   // Split the title so "Good Morning" renders orange and "Silicon Valley"
-  // renders green. Anything before/after those phrases keeps the default color.
+  // renders green on a separate line. Anything before/after those phrases
+  // keeps the default color.
   const renderTitle = (raw: string) => {
     const match = raw.match(/^(.*?)(Silicon Valley)(.*)$/s);
     if (!match) return raw;
@@ -21,6 +22,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, body }) => {
     return (
       <>
         <span className="text-orange-500">{before}</span>
+        <br />
         <span className="text-green-500">{siliconValley}</span>
         {after}
       </>

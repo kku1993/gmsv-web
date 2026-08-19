@@ -7,10 +7,10 @@ export default function Home() {
   const {data: page} = useFetch('home', () => fetchPage('home'))
 
   useSeo({
-    title: page?.title ?? 'Home',
+    title: 'Good Morning Silicon Valley',
     description:
       'Good Morning Silicon Valley (GMSV) is a student-led nonprofit hosting events, podcasts, and community programs across the Bay Area.',
   })
 
-  return <HeroPage title={page?.title} body={page?.body} />
+  return <HeroPage title="Good Morning Silicon Valley" body={page?.body} />
 }
