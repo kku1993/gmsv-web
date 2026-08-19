@@ -4,7 +4,7 @@ import Navbar from '@/components/shadcn-studio/blocks/navbar-component-01/navbar
 // new navbar block.
 const NAV_LINKS = [
   {title: 'Home', href: '/'},
-  {title: 'About', href: '/about'},
+  {title: 'People', href: '/people'},
   {title: 'Mission', href: '/mission'},
   {title: 'Events', href: '/events'},
   {title: 'Podcast', href: '/podcasts'},

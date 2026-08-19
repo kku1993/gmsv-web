@@ -117,13 +117,13 @@ function PersonSkeleton() {
   )
 }
 
-export default function About() {
+export default function People() {
   const {data: people, loading, error} = useFetch('people', fetchPeople)
   const sections = people && people.length > 0 ? groupByRole(people) : []
 
   return (
     <Container>
-      <PageHeading title="About" />
+      <PageHeading title="People" />
       {error ? (
         <p className="text-muted-foreground">Unable to load people.</p>
       ) : loading ? (

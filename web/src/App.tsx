@@ -1,7 +1,7 @@
 import {createBrowserRouter, Navigate} from 'react-router-dom'
 import {Layout} from './components/Layout'
 import Home from './pages/Home'
-import About from './pages/About'
+import People from './pages/People'
 import Mission from './pages/Mission'
 import Events from './pages/Events'
 import EventDetail from './pages/EventDetail'
@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {path: '/', element: <Home />},
-      {path: '/about', element: <About />},
+      {path: '/people', element: <People />},
       {path: '/mission', element: <Mission />},
       {path: '/events', element: <Events />},
       {path: '/events/:slug', element: <EventDetail />},

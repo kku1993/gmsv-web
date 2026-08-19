@@ -14,7 +14,7 @@ const SOCIAL_LINKS = [
 ] as const
 
 const NAV_LINKS = [
-  {title: 'About', href: '/about'},
+  {title: 'People', href: '/people'},
   {title: 'Mission', href: '/mission'},
   {title: 'Events', href: '/events'},
   {title: 'Podcast', href: '/podcasts'},
