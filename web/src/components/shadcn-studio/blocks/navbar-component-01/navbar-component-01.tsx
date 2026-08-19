@@ -22,12 +22,6 @@ const Navbar = ({navigationData}: {navigationData: NavigationItem}) => {
   // a vertical scroll and reveal the footer).
   const isHome = pathname === '/'
 
-  // Split the navigation items around the centered logo so the layout keeps
-  // the original block's symmetry (links on both sides of the logo).
-  const midpoint = Math.ceil(navigationData.length / 2)
-  const leftLinks = navigationData.slice(0, midpoint)
-  const rightLinks = navigationData.slice(midpoint)
-
   const renderDesktopLink = (item: {title: string; href: string}) => (
     <Link
       key={item.href}
@@ -47,18 +41,18 @@ const Navbar = ({navigationData}: {navigationData: NavigationItem}) => {
       }
     >
       <div className='mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-7 sm:px-6'>
+        <Link to='/'>
+          <Logo className='text-foreground gap-3' />
+        </Link>
+
         <div
           className={
             isHome
-              ? 'flex flex-1 items-center gap-8 font-medium text-white md:justify-center lg:gap-16'
-              : 'text-muted-foreground flex flex-1 items-center gap-8 font-medium md:justify-center lg:gap-16'
+              ? 'flex flex-1 items-center gap-8 font-medium text-white lg:gap-16'
+              : 'text-muted-foreground flex flex-1 items-center gap-8 font-medium lg:gap-16'
           }
         >
-          {leftLinks.map(renderDesktopLink)}
-          <Link to='/'>
-            <Logo className='text-foreground gap-3' />
-          </Link>
-          {rightLinks.map(renderDesktopLink)}
+          {navigationData.map(renderDesktopLink)}
         </div>
 
         <div className='flex items-center gap-6'>
