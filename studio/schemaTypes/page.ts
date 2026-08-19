@@ -22,7 +22,11 @@ export const page = defineType({
       name: 'body',
       title: 'Body',
       type: 'markdown',
-      description: 'Markdown-formatted page content.',
+      description: 'Markdown-formatted page content. Drag images into the editor or click the bottom bar to upload them.',
+      options: {
+        // Inserts uploaded images as Sanity asset URLs sized for body-width display.
+        imageUrl: (imageAsset) => `${imageAsset.url}?w=800`,
+      },
     }),
     defineField({
       name: 'bannerImage',
