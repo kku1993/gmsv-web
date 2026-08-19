@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import {useFetch} from '@/hooks/useFetch'
 import {fetchEvent} from '@/sanity/queries'
@@ -26,6 +27,7 @@ export default function EventDetail() {
   const {data: event, loading, error} = useFetch(`event-${slug}`, () =>
     fetchEvent(slug ?? ''),
   )
+  const [showFullImage, setShowFullImage] = useState(false)
 
   if (loading) {
     return (
@@ -64,15 +66,6 @@ export default function EventDetail() {
 
   return (
     <>
-      {event.bannerPhoto ? (
-        <SanityImage
-          image={event.bannerPhoto}
-          alt={event.title ?? ''}
-          width={1600}
-          className="mx-auto max-h-[30vh] w-auto object-contain"
-        />
-      ) : null}
-
       <Container>
         <div className="mb-6">
           <Button render={<Link to="/events" />} variant="ghost" size="sm">
@@ -91,6 +84,21 @@ export default function EventDetail() {
               <MetaItem label="Location" value={event.locationName} />
               <MetaItem label="Address" value={event.locationAddress} />
             </dl>
+            {event.bannerPhoto ? (
+              <button
+                type="button"
+                onClick={() => setShowFullImage(true)}
+                className="mt-5 block w-full overflow-hidden rounded-lg border border-border transition-opacity hover:opacity-80"
+                aria-label="View full banner image"
+              >
+                <SanityImage
+                  image={event.bannerPhoto}
+                  alt={event.title ?? ''}
+                  width={400}
+                  className="aspect-video w-full object-cover"
+                />
+              </button>
+            ) : null}
             <Separator className="my-6 md:hidden" />
           </aside>
 
@@ -100,6 +108,23 @@ export default function EventDetail() {
           </div>
         </div>
       </Container>
+
+      {showFullImage && event.bannerPhoto ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setShowFullImage(false)}
+          role="button"
+          tabIndex={-1}
+          aria-label="Close full image"
+        >
+          <SanityImage
+            image={event.bannerPhoto}
+            alt={event.title ?? ''}
+            width={1600}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+          />
+        </div>
+      ) : null}
     </>
   )
 }
