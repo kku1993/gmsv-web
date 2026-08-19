@@ -1,4 +1,5 @@
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchPeople, type Person} from '@/sanity/queries'
 import {SanityImage} from '@/components/SanityImage'
 import {Container, PageHeading} from '@/components/Page'
@@ -120,6 +121,12 @@ function PersonSkeleton() {
 export default function People() {
   const {data: people, loading, error} = useFetch('people', fetchPeople)
   const sections = people && people.length > 0 ? groupByRole(people) : []
+
+  useSeo({
+    title: 'People',
+    description:
+      'Meet the Good Morning Silicon Valley team: leadership, board members, advisors, and interns driving our mission forward.',
+  })
 
   return (
     <Container>

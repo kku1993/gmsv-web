@@ -1,4 +1,5 @@
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchPage} from '@/sanity/queries'
 import {SanityImage} from '@/components/SanityImage'
 import {Markdown} from '@/components/Markdown'
@@ -7,6 +8,12 @@ import {Skeleton} from '@/components/ui/skeleton'
 
 export default function Mission() {
   const {data: page, loading, error} = useFetch('mission', () => fetchPage('mission'))
+
+  useSeo({
+    title: page?.title ?? 'Mission',
+    description:
+      'Learn about the Good Morning Silicon Valley mission and the values that guide our student-led nonprofit work in the Bay Area.',
+  })
 
   return (
     <>

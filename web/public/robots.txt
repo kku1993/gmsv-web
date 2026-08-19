@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Dynamic detail routes are rendered client-side; the listing pages below are
+# the canonical entry points and are listed in sitemap.xml.
+Disallow: /404
+
+Sitemap: https://goodmorningsv.org/sitemap.xml

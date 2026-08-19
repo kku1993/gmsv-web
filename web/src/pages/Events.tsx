@@ -1,4 +1,5 @@
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchEvents, type EventSummary} from '@/sanity/queries'
 import {urlFor} from '@/sanity/image'
 import {formatDate, formatTimeRange} from '@/lib/format'
@@ -53,6 +54,11 @@ function EventsSkeleton() {
 }
 
 export default function Events() {
+  useSeo({
+    title: 'Events',
+    description:
+      'Browse upcoming Good Morning Silicon Valley events and community gatherings. Find dates, locations, and details for each event.',
+  })
   const {data: events, loading, error} = useFetch('events', fetchEvents)
 
   if (loading) {

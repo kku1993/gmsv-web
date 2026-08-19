@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchEvent} from '@/sanity/queries'
 import {SanityImage} from '@/components/SanityImage'
 import {Markdown} from '@/components/Markdown'
@@ -28,6 +29,12 @@ export default function EventDetail() {
     fetchEvent(slug ?? ''),
   )
   const [showFullImage, setShowFullImage] = useState(false)
+
+  useSeo({
+    title: event?.title ?? 'Event',
+    description:
+      'Details for a Good Morning Silicon Valley event: date, time, location, and what to expect.',
+  })
 
   if (loading) {
     return (

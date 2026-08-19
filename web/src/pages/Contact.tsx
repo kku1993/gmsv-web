@@ -1,4 +1,5 @@
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchPage} from '@/sanity/queries'
 import {SanityImage} from '@/components/SanityImage'
 import {Markdown} from '@/components/Markdown'
@@ -7,6 +8,12 @@ import {Skeleton} from '@/components/ui/skeleton'
 
 export default function Contact() {
   const {data: page, loading, error} = useFetch('contact', () => fetchPage('contact'))
+
+  useSeo({
+    title: page?.title ?? 'Contact',
+    description:
+      'Get in touch with Good Morning Silicon Valley. Reach out for partnerships, events, podcasts, or general inquiries.',
+  })
 
   return (
     <>

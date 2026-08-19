@@ -1,4 +1,5 @@
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchPage} from '@/sanity/queries'
 import {SanityImage} from '@/components/SanityImage'
 import {Markdown} from '@/components/Markdown'
@@ -7,6 +8,12 @@ import {Skeleton} from '@/components/ui/skeleton'
 
 export default function Sponsors() {
   const {data: page, loading, error} = useFetch('sponsors', () => fetchPage('sponsors'))
+
+  useSeo({
+    title: page?.title ?? 'Sponsors',
+    description:
+      'The sponsors and partners who make Good Morning Silicon Valley events, podcasts, and programs possible.',
+  })
 
   return (
     <>

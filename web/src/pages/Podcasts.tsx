@@ -1,4 +1,5 @@
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchPodcasts, type PodcastSummary} from '@/sanity/queries'
 import {urlFor} from '@/sanity/image'
 import {formatDate} from '@/lib/format'
@@ -51,6 +52,11 @@ function PodcastsSkeleton() {
 }
 
 export default function Podcasts() {
+  useSeo({
+    title: 'Podcast',
+    description:
+      'Listen to conversations and stories from the Good Morning Silicon Valley community. Browse all podcast episodes and watch on YouTube.',
+  })
   const {data: podcasts, loading, error} = useFetch('podcasts', fetchPodcasts)
 
   if (loading) {

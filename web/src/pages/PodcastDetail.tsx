@@ -1,5 +1,6 @@
 import {Link, useParams} from 'react-router-dom'
 import {useFetch} from '@/hooks/useFetch'
+import {useSeo} from '@/hooks/useSeo'
 import {fetchPodcast} from '@/sanity/queries'
 import {Container} from '@/components/Page'
 import {Skeleton} from '@/components/ui/skeleton'
@@ -36,6 +37,12 @@ export default function PodcastDetail() {
   const {data: podcast, loading, error} = useFetch(`podcast-${slug}`, () =>
     fetchPodcast(slug ?? ''),
   )
+
+  useSeo({
+    title: podcast?.title ?? 'Podcast',
+    description:
+      'A Good Morning Silicon Valley podcast episode. Watch the full conversation on YouTube.',
+  })
 
   if (loading) {
     return (
