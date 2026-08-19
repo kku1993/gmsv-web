@@ -9,7 +9,7 @@ export default function Home() {
   useSeo({
     title: 'Good Morning Silicon Valley',
     description:
-      'Good Morning Silicon Valley (GMSV) is a student-led nonprofit hosting events, podcasts, and community programs across the Bay Area.',
+      'Good Morning Silicon Valley (GMSV) is a nonprofit hosting events, podcasts, and community programs across the Bay Area.',
   })
 
   return <HeroPage title="Good Morning Silicon Valley" body={page?.body} />

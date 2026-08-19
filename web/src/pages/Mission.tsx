@@ -12,7 +12,7 @@ export default function Mission() {
   useSeo({
     title: page?.title ?? 'Mission',
     description:
-      'Learn about the Good Morning Silicon Valley mission and the values that guide our student-led nonprofit work in the Bay Area.',
+      'Learn about the Good Morning Silicon Valley mission and the values that guide our nonprofit work in the Bay Area.',
   })
 
   return (
