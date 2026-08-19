@@ -69,8 +69,7 @@ export default function EventDetail() {
           image={event.bannerPhoto}
           alt={event.title ?? ''}
           width={1600}
-          height={600}
-          className="h-[40vh] min-h-64 w-full object-cover"
+          className="mx-auto max-h-[30vh] w-auto object-contain"
         />
       ) : null}
 
