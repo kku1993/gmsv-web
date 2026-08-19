@@ -102,12 +102,6 @@ Schemas live in `studio/schemaTypes/*.ts` and are aggregated in
    (appId `kf2hpa96alo5ap3plotla591`). Auto-updates are enabled, so existing
    editors get the new Studio on next load.
 
-5. *(Optional)* **Deploy the GraphQL API** if anything consumes it:
-
-   ```bash
-   npm run deploy-graphql
-   ```
-
 ## Project notes
 
 - The frontend uses Tailwind v4, shadcn (base-nova style), and the `@/` alias
