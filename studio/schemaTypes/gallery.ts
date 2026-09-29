@@ -35,6 +35,12 @@ export const gallery = defineType({
         }),
     }),
     defineField({
+      name: 'date',
+      title: 'Date',
+      type: 'date',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'coverPhoto',
       title: 'Cover Photo',
       type: 'image',
@@ -75,12 +81,12 @@ export const gallery = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', slug: 'slug.current', photos: 'photos', media: 'coverPhoto'},
-    prepare: ({title, slug, photos, media}) => {
+    select: {title: 'title', slug: 'slug.current', date: 'date', photos: 'photos', media: 'coverPhoto'},
+    prepare: ({title, slug, date, photos, media}) => {
       const count = Array.isArray(photos) ? photos.length : 0
       return {
         title: title ?? 'Untitled',
-        subtitle: [`${count} photo${count === 1 ? '' : 's'}`, slug && `/${slug}`]
+        subtitle: [date, `${count} photo${count === 1 ? '' : 's'}`, slug && `/${slug}`]
           .filter(Boolean)
           .join(' · '),
         media,

@@ -67,6 +67,7 @@ export type GallerySummary = {
   _id: string
   title: string | null
   slug: {current?: string | null} | null
+  date: string | null
   coverPhoto: QueryImage
   photoCount: number
 }
@@ -115,15 +116,15 @@ const PODCAST_BY_SLUG = (slug: string) =>
     "bannerPhoto": bannerPhoto${IMAGE_PROJECTION}
   }`
 
-const GALLERIES = `*[_type == "gallery" && defined(slug.current)] | order(_createdAt desc) {
-  _id, title, slug,
+const GALLERIES = `*[_type == "gallery" && defined(slug.current)] | order(coalesce(date, _createdAt) desc) {
+  _id, title, slug, date,
   "coverPhoto": coverPhoto${IMAGE_PROJECTION},
   "photoCount": count(photos)
 }`
 
 const GALLERY_BY_SLUG = (slug: string) =>
   `*[_type == "gallery" && slug.current == "${slug}"][0] {
-    _id, title, slug,
+    _id, title, slug, date,
     "coverPhoto": coverPhoto${IMAGE_PROJECTION},
     photos[]{_key, asset->{_id, url}, alt}
   }`

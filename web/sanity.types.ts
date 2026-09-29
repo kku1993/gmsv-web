@@ -30,6 +30,7 @@ export type Gallery = {
   _rev: string;
   title?: string;
   slug?: Slug;
+  date?: string;
   coverPhoto?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
