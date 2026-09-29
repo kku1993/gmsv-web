@@ -27,7 +27,7 @@ const NAV_LINKS = [
   {title: 'Events', href: '/events'},
   {title: 'Podcast', href: '/podcasts'},
   {title: 'Sponsors', href: '/sponsors'},
-  {title: 'Contact', href: '/contact'},
+  {title: 'Join Us', href: '/join-us'},
 ] as const
 
 const IMAGE_SOURCES = [

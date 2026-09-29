@@ -8,7 +8,7 @@ import EventDetail from './pages/EventDetail'
 import Podcasts from './pages/Podcasts'
 import PodcastDetail from './pages/PodcastDetail'
 import Sponsors from './pages/Sponsors'
-import Contact from './pages/Contact'
+import JoinUs from './pages/JoinUs'
 import NotFound from './pages/NotFound'
 
 export const router = createBrowserRouter([
@@ -23,7 +23,8 @@ export const router = createBrowserRouter([
       {path: '/podcasts', element: <Podcasts />},
       {path: '/podcasts/:slug', element: <PodcastDetail />},
       {path: '/sponsors', element: <Sponsors />},
-      {path: '/contact', element: <Contact />},
+      {path: '/join-us', element: <JoinUs />},
+      {path: '/contact', element: <Navigate to="/join-us" replace />},
       {path: '/404', element: <NotFound />},
       {path: '*', element: <Navigate to="/404" replace />},
     ],

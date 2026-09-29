@@ -6,13 +6,13 @@ import {Markdown} from '@/components/Markdown'
 import {Container, PageHeading} from '@/components/Page'
 import {Skeleton} from '@/components/ui/skeleton'
 
-export default function Contact() {
-  const {data: page, loading, error} = useFetch('contact', () => fetchPage('contact'))
+export default function JoinUs() {
+  const {data: page, loading, error} = useFetch('join-us', () => fetchPage('join-us'))
 
   useSeo({
-    title: page?.title ?? 'Contact',
+    title: page?.title ?? 'Join Us',
     description:
-      'Get in touch with Good Morning Silicon Valley. Reach out for partnerships, events, podcasts, or general inquiries.',
+      'Join Good Morning Silicon Valley. Get involved with our community, events, podcasts, and partnerships.',
   })
 
   return (
@@ -28,7 +28,7 @@ export default function Contact() {
       ) : null}
 
       <Container className="max-w-3xl">
-        <PageHeading title={page?.title ?? 'Contact'} />
+        <PageHeading title={page?.title ?? 'Join Us'} />
         {loading ? (
           <div className="space-y-4">
             <Skeleton className="h-4 w-full" />
