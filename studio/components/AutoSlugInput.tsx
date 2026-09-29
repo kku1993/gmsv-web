@@ -1,20 +1,8 @@
 import {useEffect, useRef} from 'react'
 import {PatchEvent, set, unset, useFormValue, type Path, type SlugInputProps} from 'sanity'
+import {slugify, SLUG_MAX_LENGTH} from '../utils/slugify'
 
-const DEFAULT_MAX_LENGTH = 96
 const DEBOUNCE_MS = 300
-
-function defaultSlugify(input: string, maxLength: number): string {
-  return input
-    .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '') // strip combining marks (U+0300–U+036F)
-    .toLowerCase()
-    .replace(/['"‘’“”]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, maxLength)
-    .replace(/-+$/g, '')
-}
 
 // Keeps slug.current synced to the source field while the slug is empty or still
 // matches a previously generated value. A slug that diverges from the generated
@@ -22,7 +10,7 @@ function defaultSlugify(input: string, maxLength: number): string {
 export function AutoSlugInput(props: SlugInputProps) {
   const {schemaType, value, onChange} = props
   const options = schemaType.options
-  const maxLength = options?.maxLength ?? DEFAULT_MAX_LENGTH
+  const maxLength = options?.maxLength ?? SLUG_MAX_LENGTH
   const sourcePath: Path =
     typeof options?.source === 'string'
       ? [options.source]
@@ -41,7 +29,7 @@ export function AutoSlugInput(props: SlugInputProps) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const toSlug = (input: string) => defaultSlugify(input, maxLength)
+      const toSlug = (input: string) => slugify(input, maxLength)
 
       const current = slugRef.current
       const next = toSlug(sourceText)
