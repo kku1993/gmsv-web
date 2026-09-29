@@ -1,5 +1,6 @@
 import {PlayIcon} from '@sanity/icons/Play'
 import {defineField, defineType} from 'sanity'
+import {AutoSlugInput} from '../components/AutoSlugInput'
 
 export const podcast = defineType({
   name: 'podcast',
@@ -19,6 +20,7 @@ export const podcast = defineType({
       type: 'slug',
       description: 'Unique URL-friendly identifier. Must be unique across all podcasts.',
       options: {source: 'title'},
+      components: {input: AutoSlugInput},
       validation: (rule) =>
         rule.required().custom(async (slug, context) => {
           if (!slug?.current) return true

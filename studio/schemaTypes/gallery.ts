@@ -1,5 +1,6 @@
 import {ImagesIcon} from '@sanity/icons/Images'
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {AutoSlugInput} from '../components/AutoSlugInput'
 
 export const gallery = defineType({
   name: 'gallery',
@@ -19,6 +20,7 @@ export const gallery = defineType({
       type: 'slug',
       description: 'Unique URL-friendly identifier. Must be unique across all galleries.',
       options: {source: 'title'},
+      components: {input: AutoSlugInput},
       validation: (rule) =>
         rule.required().custom(async (slug, context) => {
           if (!slug?.current) return true

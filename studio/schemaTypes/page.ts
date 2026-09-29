@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {AutoSlugInput} from '../components/AutoSlugInput'
 
 export const page = defineType({
   name: 'page',
@@ -16,6 +17,7 @@ export const page = defineType({
       title: 'Slug',
       type: 'slug',
       options: {source: 'title'},
+      components: {input: AutoSlugInput},
       validation: (rule) => rule.required(),
     }),
     defineField({

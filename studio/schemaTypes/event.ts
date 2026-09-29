@@ -1,5 +1,6 @@
 import {CalendarIcon} from '@sanity/icons/Calendar'
 import {defineField, defineType} from 'sanity'
+import {AutoSlugInput} from '../components/AutoSlugInput'
 
 const TIME_REGEX = /^([01]\d|2[0-3]):[0-5]\d$/
 
@@ -21,6 +22,7 @@ export const event = defineType({
       type: 'slug',
       description: 'Unique URL-friendly identifier. Must be unique across all events.',
       options: {source: 'title'},
+      components: {input: AutoSlugInput},
       validation: (rule) =>
         rule.required().custom(async (slug, context) => {
           if (!slug?.current) return true
