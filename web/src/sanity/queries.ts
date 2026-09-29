@@ -63,6 +63,20 @@ export type PodcastSummary = {
 
 export type PodcastDetail = PodcastSummary
 
+export type GallerySummary = {
+  _id: string
+  title: string | null
+  slug: {current?: string | null} | null
+  coverPhoto: QueryImage
+  photoCount: number
+}
+
+export type GalleryPhoto = QueryImage & {_key: string}
+
+export type GalleryDetail = Omit<GallerySummary, 'photoCount'> & {
+  photos: GalleryPhoto[] | null
+}
+
 // -----------------------------------------------------------------------------
 // Queries
 // -----------------------------------------------------------------------------
@@ -101,6 +115,19 @@ const PODCAST_BY_SLUG = (slug: string) =>
     "bannerPhoto": bannerPhoto${IMAGE_PROJECTION}
   }`
 
+const GALLERIES = `*[_type == "gallery" && defined(slug.current)] | order(_createdAt desc) {
+  _id, title, slug,
+  "coverPhoto": coverPhoto${IMAGE_PROJECTION},
+  "photoCount": count(photos)
+}`
+
+const GALLERY_BY_SLUG = (slug: string) =>
+  `*[_type == "gallery" && slug.current == "${slug}"][0] {
+    _id, title, slug,
+    "coverPhoto": coverPhoto${IMAGE_PROJECTION},
+    photos[]{_key, asset->{_id, url}, alt}
+  }`
+
 // -----------------------------------------------------------------------------
 // Fetch helpers
 // -----------------------------------------------------------------------------
@@ -119,3 +146,8 @@ export const fetchPodcasts = () => client.fetch<PodcastSummary[]>(PODCASTS)
 
 export const fetchPodcast = (slug: string) =>
   client.fetch<PodcastDetail | null>(PODCAST_BY_SLUG(slug))
+
+export const fetchGalleries = () => client.fetch<GallerySummary[]>(GALLERIES)
+
+export const fetchGallery = (slug: string) =>
+  client.fetch<GalleryDetail | null>(GALLERY_BY_SLUG(slug))

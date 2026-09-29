@@ -1,7 +1,8 @@
 import {event} from './event'
+import {gallery} from './gallery'
 import {impactWalk} from './impactWalk'
 import {page} from './page'
 import {person} from './person'
 import {podcast} from './podcast'
 
-export const schemaTypes = [page, person, event, podcast, impactWalk]
+export const schemaTypes = [page, person, event, podcast, impactWalk, gallery]

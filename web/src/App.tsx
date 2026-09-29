@@ -7,6 +7,8 @@ import Events from './pages/Events'
 import EventDetail from './pages/EventDetail'
 import Podcasts from './pages/Podcasts'
 import PodcastDetail from './pages/PodcastDetail'
+import Gallery from './pages/Gallery'
+import GalleryDetail from './pages/GalleryDetail'
 import Sponsors from './pages/Sponsors'
 import JoinUs from './pages/JoinUs'
 import Donate from './pages/Donate'
@@ -23,6 +25,8 @@ export const router = createBrowserRouter([
       {path: '/events/:slug', element: <EventDetail />},
       {path: '/podcasts', element: <Podcasts />},
       {path: '/podcasts/:slug', element: <PodcastDetail />},
+      {path: '/gallery', element: <Gallery />},
+      {path: '/gallery/:slug', element: <GalleryDetail />},
       {path: '/sponsors', element: <Sponsors />},
       {path: '/join-us', element: <JoinUs />},
       {path: '/contact', element: <Navigate to="/join-us" replace />},

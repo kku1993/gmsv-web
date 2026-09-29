@@ -8,6 +8,7 @@ const NAV_LINKS = [
   {title: 'Mission', href: '/mission'},
   {title: 'Events', href: '/events'},
   {title: 'Podcast', href: '/podcasts'},
+  {title: 'Gallery', href: '/gallery'},
   {title: 'Sponsors', href: '/sponsors'},
   {title: 'Join Us', href: '/join-us'},
   {title: 'Donate', href: '/donate'},
