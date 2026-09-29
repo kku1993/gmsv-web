@@ -10,6 +10,7 @@ const NAV_LINKS = [
   {title: 'Podcast', href: '/podcasts'},
   {title: 'Sponsors', href: '/sponsors'},
   {title: 'Join Us', href: '/join-us'},
+  {title: 'Donate', href: '/donate'},
 ] as const
 
 export function Header() {

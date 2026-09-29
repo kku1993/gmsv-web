@@ -9,6 +9,7 @@ import Podcasts from './pages/Podcasts'
 import PodcastDetail from './pages/PodcastDetail'
 import Sponsors from './pages/Sponsors'
 import JoinUs from './pages/JoinUs'
+import Donate from './pages/Donate'
 import NotFound from './pages/NotFound'
 
 export const router = createBrowserRouter([
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       {path: '/sponsors', element: <Sponsors />},
       {path: '/join-us', element: <JoinUs />},
       {path: '/contact', element: <Navigate to="/join-us" replace />},
+      {path: '/donate', element: <Donate />},
       {path: '/404', element: <NotFound />},
       {path: '*', element: <Navigate to="/404" replace />},
     ],
