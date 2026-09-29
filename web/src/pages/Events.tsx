@@ -4,6 +4,7 @@ import {fetchEvents, type EventSummary} from '@/sanity/queries'
 import {urlFor} from '@/sanity/image'
 import {formatDate, formatTimeRange} from '@/lib/format'
 import {Skeleton} from '@/components/ui/skeleton'
+import {Separator} from '@/components/ui/separator'
 import {Container} from '@/components/Page'
 import Blog, {type BlogPost} from '@/components/shadcn-studio/blocks/blog-component-17/blog-component-17'
 
@@ -85,11 +86,37 @@ export default function Events() {
     )
   }
 
+  // Split into upcoming (soonest first) and past (most recent first). The query
+  // returns events newest-first, so the upcoming list is reversed.
+  const today = new Date().toLocaleDateString('en-CA')
+  const upcoming = events.filter(e => e.date != null && e.date >= today).reverse()
+  const past = events.filter(e => e.date == null || e.date < today)
+
   return (
-    <Blog
-      blogPosts={events.map(eventToPost)}
-      heading='Events'
-      subtitle='Join us at our upcoming community events and gatherings.'
-    />
+    <>
+      <Blog
+        blogPosts={upcoming.map(eventToPost)}
+        heading='Upcoming Events'
+        subtitle={
+          upcoming.length
+            ? 'Join us at our upcoming community events and gatherings.'
+            : 'No upcoming events right now — check back soon.'
+        }
+        className={past.length ? 'pt-8 sm:pt-16 lg:pt-24' : undefined}
+      />
+      {past.length > 0 && (
+        <>
+          <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+            <Separator className='my-8 sm:my-12' />
+          </div>
+          <Blog
+            blogPosts={past.map(eventToPost)}
+            heading='Past Events'
+            subtitle='Highlights from our previous community gatherings.'
+            className='pb-8 sm:pb-16 lg:pb-24'
+          />
+        </>
+      )}
+    </>
   )
 }

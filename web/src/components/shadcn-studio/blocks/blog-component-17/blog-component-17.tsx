@@ -25,6 +25,9 @@ type BlogProps = {
   badgeText?: string
   heading?: string
   subtitle?: string
+  // Replaces the section's vertical padding (e.g. when stacking multiple
+  // sections back-to-back). Pass the full padding spec, e.g. 'pt-8 sm:pt-16'.
+  className?: string
 }
 
 const Blog = ({
@@ -32,9 +35,10 @@ const Blog = ({
   badgeText,
   heading = 'Related Post',
   subtitle = 'Expand your knowledge with these hand-picked posts.',
+  className,
 }: BlogProps) => {
   return (
-    <section className='py-8 sm:py-16 lg:py-24'>
+    <section className={className ?? 'py-8 sm:py-16 lg:py-24'}>
       <div className='mx-auto max-w-7xl space-y-16 px-4 py-8 sm:px-6 lg:px-8'>
         {/* Header */}
         <div className='space-y-4'>
